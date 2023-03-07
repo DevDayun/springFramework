@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Pds">
+
+<select id="pdslist" resultType="mul.cam.a.dto.PdsDto">
+	select seq, id, title, content, filename, newfilename, 
+		readcount, downcount, regdate
+	from pds
+</select>
+
+<insert id="uploadPds" parameterType="mul.cam.a.dto.PdsDto">
+	insert into pds(id, title, content, filename, newfilename, readcount, downcount, regdate)
+	values(#{id}, #{title}, #{content}, #{filename}, #{newfilename}, 0, 0, now())
+</insert>
+
+<!-- 다운로드 수 -->
+<update id="downcount" parameterType="Integer">
+	update pds
+	set downcount=downcount+1
+	where seq=#{seq}
+</update>
+
+<!-- 자료 상세보기 -->
+<select id="getPds" parameterType="java.lang.Integer" resultType="mul.cam.a.dto.PdsDto">
+	select seq, id, title, content, filename, newfilename, readcount, downcount, regdate
+	from pds
+	where seq=#{seq}
+</select>
+
+<!-- 자료 삭제 : del 컬럼이 없으므로 delete -->
+<delete id="deletePds" parameterType="mul.cam.a.dto.PdsDto">
+	delete from pds
+	where seq=#{seq}
+</delete>
+
+<!-- 자료 수정 -->
+<update id="updatePds" parameterType="mul.cam.a.dto.PdsDto">
+	update pds
+	set title=#{title}, content=#{content}, filename=#{filename}, newfilename=#{newfilename}, regdate=now()
+	where seq=#{seq}
+</update>
+
+</mapper>
